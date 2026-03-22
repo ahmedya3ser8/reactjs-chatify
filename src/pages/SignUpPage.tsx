@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useForm, type SubmitHandler } from 'react-hook-form';
-import { MailIcon, MessageCircleIcon, UserIcon } from "lucide-react";
+import { LockIcon, MailIcon, MessageCircleIcon, UserIcon } from "lucide-react";
 import { LoaderIcon } from "react-hot-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
@@ -62,14 +62,14 @@ const SignupPage = () => {
                   <div className="input-field">
                     <label className="auth-input-label">Password</label>
                     <div className="relative">
-                      <MailIcon className="auth-input-icon" />
+                      <LockIcon className="auth-input-icon" />
                       <input type="password" {...register('password')} className="input" placeholder="Enter your password" />
                     </div>
                   </div>
 
                   <button type="submit" className="auth-btn" disabled={isSigningUp}> 
                     {isSigningUp ? (
-                      <LoaderIcon className="w-full h-5 animate-spin text-center" />
+                      <LoaderIcon className="w-full h-5 animate-spin text-center mx-auto" />
                     ) : (
                       "Create Account"
                     )}
