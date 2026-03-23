@@ -43,27 +43,27 @@ const SignupPage = () => {
 
                 <form onSubmit={handleSubmit(submitForm)} className="space-y-6">
 
-                  <div className="input-field">
+                  <div className="input-group">
                     <label className="auth-input-label">Full Name</label>
                     <div className="relative">
                       <UserIcon className="auth-input-icon" />
-                      <input type="text" {...register('fullName')} className="input" placeholder="John Doe" />
+                      <input type="text" {...register('fullName')} className="input-field" placeholder="John Doe" />
                     </div>
                   </div>
 
-                  <div className="input-field">
+                  <div className="input-group">
                     <label className="auth-input-label">Email</label>
                     <div className="relative">
                       <MailIcon className="auth-input-icon" />
-                      <input type="email" {...register('email')} className="input" placeholder="johndoe@gmail.com" />
+                      <input type="email" {...register('email')} className="input-field" placeholder="johndoe@gmail.com" />
                     </div>
                   </div>
 
-                  <div className="input-field">
+                  <div className="input-group">
                     <label className="auth-input-label">Password</label>
                     <div className="relative">
                       <LockIcon className="auth-input-icon" />
-                      <input type="password" {...register('password')} className="input" placeholder="Enter your password" />
+                      <input type="password" {...register('password')} className="input-field" placeholder="Enter your password" />
                     </div>
                   </div>
 
