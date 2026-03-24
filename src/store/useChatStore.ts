@@ -17,6 +17,7 @@ export interface IMessage {
   receiverId: string;
   text: string;
   image: string;
+  createdAt: string;
 }
 
 interface IChatState {
@@ -32,7 +33,8 @@ interface IChatState {
   setActiveTab: (tab: 'chats' | 'contacts') => void;
   setSelectedUser: (selectedUser: IUser | null) => void;
   getAllContacts: () => Promise<void>;
-  getMyChatPartners: () => Promise<void>
+  getMyChatPartners: () => Promise<void>;
+  getMessagesByUserId: (userId: string) => Promise<void>;
 }
 
 const getInitialSound = (): boolean => {
@@ -86,6 +88,23 @@ export const useChatStore = create<IChatState>((set, get) => ({
       const res = await axiosInstance.get('/messages/chats');
       console.log('res', res);
       set({ chats: res.data });
+    } catch (error) {
+      if (isAxiosError(error)) {
+        toast.error(error.response?.data?.message || 'Failed. Please try again.');
+      } else {
+        toast.error('Unexpected error occurred');
+      }
+    } finally {
+      set({ isMessagesLoading: false });
+    }
+  },
+
+  getMessagesByUserId: async (userId: string) => {
+    set({ isMessagesLoading: true })
+    try {
+      const res = await axiosInstance.get(`messages/${userId}`);
+      console.log('res', res);
+      set({ messages: res.data });
     } catch (error) {
       if (isAxiosError(error)) {
         toast.error(error.response?.data?.message || 'Failed. Please try again.');
