@@ -3,6 +3,7 @@ import toast from "react-hot-toast";
 import { create } from "zustand";
 
 import { axiosInstance } from "../lib/axios";
+import { useAuthStore } from "./useAuthStore";
 
 export interface IUser {
   _id: string;
@@ -17,7 +18,7 @@ export interface IMessage {
   receiverId: string;
   text: string;
   image: string;
-  createdAt: string;
+  createdAt: Date;
 }
 
 interface IChatState {
@@ -35,6 +36,7 @@ interface IChatState {
   getAllContacts: () => Promise<void>;
   getMyChatPartners: () => Promise<void>;
   getMessagesByUserId: (userId: string) => Promise<void>;
+  sendMessage: (formData: FormData) => Promise<void>;
 }
 
 const getInitialSound = (): boolean => {
@@ -86,7 +88,6 @@ export const useChatStore = create<IChatState>((set, get) => ({
     set({ isMessagesLoading: true })
     try {
       const res = await axiosInstance.get('/messages/chats');
-      console.log('res', res);
       set({ chats: res.data });
     } catch (error) {
       if (isAxiosError(error)) {
@@ -103,7 +104,6 @@ export const useChatStore = create<IChatState>((set, get) => ({
     set({ isMessagesLoading: true })
     try {
       const res = await axiosInstance.get(`messages/${userId}`);
-      console.log('res', res);
       set({ messages: res.data });
     } catch (error) {
       if (isAxiosError(error)) {
@@ -113,6 +113,33 @@ export const useChatStore = create<IChatState>((set, get) => ({
       }
     } finally {
       set({ isMessagesLoading: false });
+    }
+  },
+
+  sendMessage: async (formData) => {
+    const { selectedUser, messages } = get();
+    const { authUser } = useAuthStore.getState();
+    const tempId = `temp-${Date.now()}`;
+    const optimisticMessage = {
+      _id: tempId,
+      senderId: authUser?._id as string,
+      receiverId: selectedUser?._id as string,
+      text: formData.get("text") as string,
+      image: formData.get("image") as string,
+      createdAt: new Date(),
+      isOptimistic: true
+    }
+    set({ messages: [...messages, optimisticMessage] });
+    try {
+      const res = await axiosInstance.post(`messages/send/${selectedUser?._id}`, formData);
+      set({ messages: messages.concat(res.data) });
+    } catch (error) {
+      if (isAxiosError(error)) {
+        set({ messages: messages });
+        toast.error(error.response?.data?.message || 'Failed. Please try again.');
+      } else {
+        toast.error('Unexpected error occurred');
+      }
     }
   }
 }));
