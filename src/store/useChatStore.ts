@@ -68,7 +68,7 @@ export const useChatStore = create<IChatState>((set, get) => ({
   },
 
   setActiveTab: (tab) => set({ activeTab: tab }), 
-  
+
   setSelectedUser: (selectedUser) => set({ selectedUser }),
 
   getAllContacts: async () => {

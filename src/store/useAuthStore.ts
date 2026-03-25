@@ -7,6 +7,8 @@ import { axiosInstance } from '../lib/axios';
 import type { TSignupSchema } from '../pages/SignUpPage';
 import type { TLoginSchema } from '../pages/LoginPage';
 
+const BASE_URL = import.meta.env.BASE_URL;
+
 export interface IUser {
   _id: string;
   fullName: string;
@@ -124,8 +126,8 @@ export const useAuthStore = create<IAuthState>((set, get) => ({
   connectSocket: () => {
     const { authUser } = get();
     if (!authUser || get().socket?.connected) return;
-    
-    const socket = io('http://localhost:3000', { 
+
+    const socket = io(BASE_URL, { 
       withCredentials: true // this ensures cookies are sent with the connection
     });
 
