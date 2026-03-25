@@ -7,7 +7,7 @@ import { axiosInstance } from '../lib/axios';
 import type { TSignupSchema } from '../pages/SignUpPage';
 import type { TLoginSchema } from '../pages/LoginPage';
 
-const BASE_URL = import.meta.env.BASE_URL;
+const BASE_URL = import.meta.env.VITE_API_URL;
 
 export interface IUser {
   _id: string;
